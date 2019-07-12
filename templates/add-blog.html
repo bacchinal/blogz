@@ -1,7 +1,7 @@
 {% extends  'base.html' %}
 
 {% block content %}
-<form>
+<form action='/main-page' method='POST'>
     <div>
         <h1 class='head'>Add a Blog Entry</h1>
         <label for='title'>Title for your new blog:</label><br>
@@ -11,6 +11,7 @@
         <label for='entry'>Your new blog:</label><br>
         <textarea id='entry' name='entry'></textarea>
     </div>
+    <input type='submit' value='post it'>
 </form>
 
 
