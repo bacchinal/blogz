@@ -7,40 +7,58 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:admin@loca
 app.config['SQLALCHEMY_ECHO'] = True
 db = SQLAlchemy(app)
 
-@app.route('/add-blog', methods=['GET','POST'])
-def add():
-    return render_template('add-blog.html')
-    return redirect('/')
+app.secret_key = '?/>qb7T;Fe:RYMae'
 
-@app.route('/main-page', methods=['POST'])
-def index():
-    return render_template('main-page')
-
-class Entry(db.Model):
+class Blog(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     title = db.Column(db.String(120))
-    completed = db.Column(db.Boolean)
-    owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    body = db.Column(db.Text)
 
-    def __init__(self, title, owner ):
+    def __init__(self, title, body ):
         self.title = title
         self.completed = False
-        self.owner = owner
-
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    email = db.Column(db.String(120), unique=True)
-    password = db.Column(db.String(120))
-    tasks = db.relationship('Entry', backref='owner')
-
-    def __init__(self, email, password):
-        self.email = email
-        self.password = password
+        self.body = body
 
 
 
 
+
+
+
+
+
+@app.route('/', methods=['POST', 'GET'])
+def index():
+    
+    if request.method == 'POST':
+        blog_name = request.form['title']
+        blog_body = request.form['body']
+
+        if blog_name == '':
+            flash('Oops! Your entry needs a title.', 'error')
+            
+            return render_template('add-blog.html', title='BLOGADOCIOUS!', blogbody=blog_body)
+        elif blog_body == '':
+            flash('This field cannot be empty. Please enter some text into your blog.', 'error')
+            return render_template('add-blog.html', title='BLOGADOCIOUS!', blogname=blog_name)
+
+        new_blog = Blog(blog_name, blog_body)
+        db.session.add(new_blog)
+        db.session.commit()
+        return redirect('/blog')
+    else:
+        return render_template('add-blog.html', title="BLOGADOCIOUS!") 
+
+    entries = Blog.query.all()
+
+@app.route('/blog', methods=['POST', 'GET'])
+def posted():
+    entries = Blog.query.all()
+
+    return render_template('blog.html', title='BLOGADOCIOUS!',entries=entries)
+
+    
 
 
 if __name__ == '__main__':

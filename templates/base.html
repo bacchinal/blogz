@@ -2,11 +2,20 @@
 <html>
     <head>
         <title>{{title}}</title>
-        <link rel='stylesheet' type='text/css' href='styles.css'>
+        <style>
+            .head{ 
+                text-align: center;
+            }
+            body{
+                background-image: url('borrowedBG.jpg');
+            }
+        </style>
 
     </head>
     <body>
-        <a href='/mainblog'>Main Blog Page</a> | <a href='/add-blog'>Add a Blog Entry</a>
+        
+        <a href='/blog'>Main Blog Page</a> | <a href='/'>Add a Blog Entry</a>
+        
         {% block content %}
 
 
