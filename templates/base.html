@@ -5,9 +5,15 @@
         <style>
             .head{ 
                 text-align: center;
+                font: size 40px;
+            }
+            .error{
+                color: red;
             }
             body{
-                background-image: url('borrowedBG.jpg');
+                font-family: Georgia, serif;
+                color: darkblue;
+                background-image: url(https://static1.squarespace.com/static/5ac76b0d4cde7afdb35ccd1f/t/5af5f459758d46b9d4ec9894/1530282886936/SD+Clouds+and+Pillow.jpg)
             }
         </style>
 
@@ -16,9 +22,15 @@
         
         <a href='/blog'>Main Blog Page</a> | <a href='/'>Add a Blog Entry</a>
         
+        {% with messages = get_flashed_messages(with_categories = True)%}
+            <ul>
+                {% for category,message in messages %}
+                    <li class='{{category}}'>{{message}}</li>
+                {% endfor %}
+            </ul>
+
+        {% endwith %}
         {% block content %}
-
-
         {% endblock %}
     </body>
 </html>

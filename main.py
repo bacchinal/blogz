@@ -37,18 +37,17 @@ def index():
 
         if blog_name == '':
             flash('Oops! Your entry needs a title.', 'error')
-            
-            return render_template('add-blog.html', title='BLOGADOCIOUS!', blogbody=blog_body)
+            return render_template('newpost.html', title='BLOGADOCIOUS!', blogbody=blog_body)
         elif blog_body == '':
             flash('This field cannot be empty. Please enter some text into your blog.', 'error')
-            return render_template('add-blog.html', title='BLOGADOCIOUS!', blogname=blog_name)
+            return render_template('newpost.html', title='BLOGADOCIOUS!', blogname=blog_name)
 
         new_blog = Blog(blog_name, blog_body)
         db.session.add(new_blog)
         db.session.commit()
         return redirect('/blog')
     else:
-        return render_template('add-blog.html', title="BLOGADOCIOUS!") 
+        return render_template('newpost.html', title="BLOGADOCIOUS!") 
 
     entries = Blog.query.all()
 
