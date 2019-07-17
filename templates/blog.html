@@ -8,8 +8,8 @@
     <p>No entries yet</p>
     {% else %}
         {% for entry in entries %}
-          
-            <h2>{{entry.title}}</h2>
+            entry.id = id
+            <a href='/posted?=id'><h2>{{entry.title}}</h2></a>
             <p>{{entry.body}}</p>
             <hr>
         {% endfor %}   

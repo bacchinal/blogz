@@ -23,12 +23,30 @@ class Blog(db.Model):
 
 
 
-
-
-
-
-
 @app.route('/', methods=['POST', 'GET'])
+def home_page():
+    if request.method == 'POST':
+        blog_name = request.form['title']
+        blog_body = request.form['body']
+
+        if blog_name == '':
+            flash('Oops! Your entry needs a title.', 'error')
+            return render_template('newpost.html', title='BLOGADOCIOUS!', blogbody=blog_body)
+        elif blog_body == '':
+            flash('Hold on a sec! Please enter some text into your blog.', 'error')
+            return render_template('newpost.html', title='BLOGADOCIOUS!', blogname=blog_name)
+        
+        new_blog = Blog(blog_name, blog_body)
+        db.session.add(new_blog)
+        db.session.commit()
+        return redirect('/posted')
+    else:
+        return render_template('newpost.html', title="BLOGADOCIOUS!")
+
+
+
+
+@app.route('/newpost', methods=['POST', 'GET'])
 def index():
     
     if request.method == 'POST':
@@ -39,20 +57,27 @@ def index():
             flash('Oops! Your entry needs a title.', 'error')
             return render_template('newpost.html', title='BLOGADOCIOUS!', blogbody=blog_body)
         elif blog_body == '':
-            flash('This field cannot be empty. Please enter some text into your blog.', 'error')
+            flash('Hold on a sec! Please enter some text into your blog.', 'error')
             return render_template('newpost.html', title='BLOGADOCIOUS!', blogname=blog_name)
-
+        
         new_blog = Blog(blog_name, blog_body)
         db.session.add(new_blog)
         db.session.commit()
-        return redirect('/blog')
+        return redirect('/posted')
     else:
         return render_template('newpost.html', title="BLOGADOCIOUS!") 
 
-    entries = Blog.query.all()
+
+
+@app.route('/posted', methods=['POST', 'GET'])
+def posted():
+    blogname = request.form['title']
+    blogbody = request.form['body']
+    
+    return render_template('posted.html', title='BLOGADOCIOUS')
 
 @app.route('/blog', methods=['POST', 'GET'])
-def posted():
+def mainblog():
     entries = Blog.query.all()
 
     return render_template('blog.html', title='BLOGADOCIOUS!',entries=entries)
