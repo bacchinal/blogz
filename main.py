@@ -20,6 +20,10 @@ class Blog(db.Model):
         self.completed = False
         self.body = body
 
+    def __repr__(self):
+
+        return '<Blog {0}>'.format(self.title)
+
 
 
 
@@ -71,10 +75,10 @@ def index():
 
 @app.route('/posted', methods=['POST', 'GET'])
 def posted():
-    blogname = request.form['title']
-    blogbody = request.form['body']
-    
-    return render_template('posted.html', title='BLOGADOCIOUS')
+    blog_title = request.args.get('title')
+    blog_body = request.args.get('body')
+
+    return render_template('posted.html', title='BLOGADOCIOUS', blogbody = blog_body, blogtitle = blog_title)
 
 @app.route('/blog', methods=['POST', 'GET'])
 def mainblog():
