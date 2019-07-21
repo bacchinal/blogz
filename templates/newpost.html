@@ -1,15 +1,15 @@
 {% extends  'base.html' %}
 
 {% block content %}
-<form  method='POST'>
+<form method='POST'>
     <div>
         <h1 class='head'>Add Your Entry Here</h1>
         <label for='title'>Title for your new blog:</label><br>
-        <input id='title' type='text' name='title' value={{blogname}} >
+        <input id='title' type='text' name='title'  >
     </div>
     <div>
         <label for='body'>Your new blog:</label><br>
-        <textarea rows= '10' columns='100' id='body' name='body' value={{blogbody}} ></textarea>
+        <textarea rows= '10' columns='100' id='body' name='body'  ></textarea>
     </div>
     <input type='submit' value='post it'>
 </form>

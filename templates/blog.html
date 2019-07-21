@@ -4,18 +4,18 @@
 
 <form method='POST'>
     <h1 class='head'>Issa Blog Y'all!!</h1>
-    {% if entries|length == 0 %}
-    <p>No entries yet</p>
-    {% else %}
-        {% for entry in entries %}
-          
-            <h2>{{entry.title}}</h2>
-            <p>{{entry.body}}</p>
-            <hr>
-        {% endfor %}   
-           
+    
+    
+    {% for entry in entries %}
+            
+        <a href='/blog?id={{entry.id}}'><h2>{{entry.title}}</h2></a>
+        <p>{{entry.body}}</p>
         
-    {% endif %}
+    {% endfor %}  
+         
+          
+        
+    
 
 </form>
 

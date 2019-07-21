@@ -15,12 +15,15 @@
                 color: darkblue;
                 background-image: url(https://static1.squarespace.com/static/5ac76b0d4cde7afdb35ccd1f/t/5af5f459758d46b9d4ec9894/1530282886936/SD+Clouds+and+Pillow.jpg)
             }
+            .single{
+                text-align: center;
+            }
         </style>
 
     </head>
     <body>
         
-        <a href='/blog'>Main Blog Page</a> | <a href='/'>Add a Blog Entry</a>
+        <a href='/blog'>Main Blog Page</a> | <a href='/newpost'>Add a Blog Entry</a>
         
         {% with messages = get_flashed_messages(with_categories = True)%}
             <ul>
