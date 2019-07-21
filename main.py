@@ -27,25 +27,10 @@ class Blog(db.Model):
 
 
 
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/')
 def home_page():
-    if request.method == 'POST':
-        blog_name = request.form['title']
-        blog_body = request.form['body']
 
-        if blog_name == '':
-            flash('Oops! Your entry needs a title.', 'error')
-            return render_template('newpost.html', title='BLOGADOCIOUS!', blogbody=blog_body)
-        elif blog_body == '':
-            flash('Hold on a sec! Please enter some text into your blog.', 'error')
-            return render_template('newpost.html', title='BLOGADOCIOUS!', blogname=blog_name)
-        
-        new_blog = Blog(blog_name, blog_body)
-        db.session.add(new_blog)
-        db.session.commit()
-        return redirect('/posted')
-    else:
-        return render_template('newpost.html', title="BLOGADOCIOUS!")
+    return redirect('/blog')
 
 
 
@@ -54,37 +39,43 @@ def home_page():
 def index():
     
     if request.method == 'POST':
-        blog_name = request.form['title']
+        blog_title = request.form['title']
         blog_body = request.form['body']
 
-        if blog_name == '':
+        if blog_title == '':
             flash('Oops! Your entry needs a title.', 'error')
-            return render_template('newpost.html', title='BLOGADOCIOUS!', blogbody=blog_body)
+            return render_template('newpost.html', title='BLOGADOCIOUS!')
         elif blog_body == '':
             flash('Hold on a sec! Please enter some text into your blog.', 'error')
-            return render_template('newpost.html', title='BLOGADOCIOUS!', blogname=blog_name)
+            return render_template('newpost.html', title='BLOGADOCIOUS!')
         
-        new_blog = Blog(blog_name, blog_body)
+        new_blog = Blog(blog_title, blog_body)
         db.session.add(new_blog)
         db.session.commit()
-        return redirect('/posted')
+        return render_template('/posted.html', title='BLOGADOCIOUS', blog_title=blog_title, blog_body=blog_body)
     else:
         return render_template('newpost.html', title="BLOGADOCIOUS!") 
 
 
 
-@app.route('/posted', methods=['POST', 'GET'])
-def posted():
-    blog_title = request.args.get('title')
-    blog_body = request.args.get('body')
+#@app.route('/posted', methods=['POST', 'GET'])
+#def posted():
+#    blog_title = request.args.get('title')
+#    blog_body = request.args.get('body')#
 
-    return render_template('posted.html', title='BLOGADOCIOUS', blogbody = blog_body, blogtitle = blog_title)
+#    return render_template('posted.html', title='BLOGADOCIOUS', blogbody = blog_body, blogtitle = blog_title)
 
 @app.route('/blog', methods=['POST', 'GET'])
 def mainblog():
-    entries = Blog.query.all()
+    blog_id = request.args.get('id')
+    if blog_id == None:
+        entries = Blog.query.all()
+        return render_template('blog.html', title='BLOGADOCIOUS!',entries=entries)
+    else:
+        entries = Blog.query.get(blog_id)
+        return render_template('blog.html', title='BLOGADOCIOUS!', entries=entries)
 
-    return render_template('blog.html', title='BLOGADOCIOUS!',entries=entries)
+    
 
     
 
