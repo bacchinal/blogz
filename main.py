@@ -58,12 +58,7 @@ def index():
 
 
 
-#@app.route('/posted', methods=['POST', 'GET'])
-#def posted():
-#    blog_title = request.args.get('title')
-#    blog_body = request.args.get('body')#
 
-#    return render_template('posted.html', title='BLOGADOCIOUS', blogbody = blog_body, blogtitle = blog_title)
 
 @app.route('/blog', methods=['POST', 'GET'])
 def mainblog():
@@ -72,8 +67,11 @@ def mainblog():
         entries = Blog.query.all()
         return render_template('blog.html', title='BLOGADOCIOUS!',entries=entries)
     else:
-        entries = Blog.query.get(blog_id)
-        return render_template('blog.html', title='BLOGADOCIOUS!', entries=entries)
+        single = Blog.query.get(blog_id)
+        blog_title = single.title
+        blog_body = single.body
+
+        return render_template('posted.html', title='BLOGADOCIOUS!',blog_title=blog_title, blog_body=blog_body)
 
     
 

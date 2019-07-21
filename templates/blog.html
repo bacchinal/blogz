@@ -8,9 +8,9 @@
     
     {% for entry in entries %}
             
-        <a href='/blog?={{entries.id}}'><h2>{{entry.title}}</h2></a>
+        <a href='/blog?id={{entry.id}}'><h2>{{entry.title}}</h2></a>
         <p>{{entry.body}}</p>
-        <hr>
+        
     {% endfor %}  
          
           
