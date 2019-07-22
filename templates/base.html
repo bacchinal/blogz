@@ -18,12 +18,21 @@
             .single{
                 text-align: center;
             }
+            .logout{
+                text-align: 
+            }
         </style>
 
     </head>
     <body>
-        
-        <a href='/blog'>Main Blog Page</a> | <a href='/newpost'>Add a Blog Entry</a>
+        <ul>
+            <li><a href='/login'>Login</a></li>
+            <li><a href='/blog'>Main Blog Page</a></li>  
+            <li><a href='/newpost'>Add a Blog Entry</a></li>
+            <li><a href='/logout'>Logout</a></li>
+            <li><a href='/'>Users</a></li>
+        </ul>
+         
         
         {% with messages = get_flashed_messages(with_categories = True)%}
             <ul>
