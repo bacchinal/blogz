@@ -1,0 +1,22 @@
+{% extends  'base.html' %}
+
+{% block content %}
+
+<form method='POST'>
+    <h1 class='head'>User's Blogs</h1>
+    
+    
+    {% for blogz in user_blogs %}
+            
+        <a href='/blog?id={{blogz.id}}'><h2>{{blogz.title}}</h2></a>
+        <p>{{blogz.body}}</p>
+        <p class='authorline'>written by <a href='/blog?user_id={{blogz.owner.id}}'>{{blogz.owner.username}}</a></p>
+    {% endfor %}  
+         
+          
+        
+    
+
+</form>
+
+{% endblock %}
