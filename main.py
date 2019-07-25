@@ -16,11 +16,11 @@ class Blog(db.Model):
     body = db.Column(db.Text)
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
-    def __init__(self, title, body ):
+    def __init__(self, title, body, owner_id):
         self.title = title
         self.completed = False
         self.body = body
-        self.owner = owner
+        self.owner_id = owner_id
 
 
     def __repr__(self):
@@ -31,7 +31,7 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(120), unique=True)
     password = db.Column(db.String(120))
-    blogs = db.relationship('Blog', backref='owner')
+    owner_id = db.relationship('Blog', backref='owner')
 
     def __init__(self, username, password):
         self.username = username
@@ -41,12 +41,12 @@ class User(db.Model):
 
 @app.before_request
 def require_login():
-    allowed_routes = ['login', 'signup', 'blog']
+    allowed_routes = ['login', 'signup', 'blog', 'index']
     if request.endpoint not in allowed_routes and 'username' not in session:
         return redirect('/login')
 
 @app.route('/newpost', methods=['POST', 'GET'])
-def index():
+def newpost():
 
     owner = User.query.filter_by(username=session['username']).first()
 
@@ -61,28 +61,34 @@ def index():
             flash('Hold on a sec! Please enter some text into your blog.', 'error')
             return render_template('newpost.html', title='BLOGADOCIOUS!')
         
-        new_blog = Blog(blog_title, blog_body)
+        new_blog = Blog(blog_title, blog_body, owner.id)
         db.session.add(new_blog)
         db.session.commit()
-        return render_template('/posted.html', title='BLOGADOCIOUS', blog_title=blog_title, blog_body=blog_body)
+        single = Blog.query.filter_by(owner=owner)
+        return render_template('/post.html', title='BLOGADOCIOUS', blog_title=blog_title, blog_body=blog_body)
     else:
         return render_template('newpost.html', title="BLOGADOCIOUS!") 
 
 
 @app.route('/blog', methods=['POST', 'GET'])
-def mainblog():
+def blog():
     
 
     blog_id = request.args.get('id')
-    if blog_id == None:
-        entries = Blog.query.all()
-        return render_template('blog.html', title='BLOGADOCIOUS!',entries=entries)
-    else:
+    user_id = request.args.get('user_id')
+    
+    if blog_id:
         single = Blog.query.get(blog_id)
         blog_title = single.title
         blog_body = single.body
+        return render_template('posted.html', title='BLOGADOCIOUS!',blog_body=blog_body, blog_title=blog_title, single=single)
+    if user_id:
+        user_blogs = Blog.query.filter_by(owner_id=user_id)
+        return render_template('singleuser.html', title='BLOGADOCIOUS', user_blogs=user_blogs)
+    elif not blog_id:
+            entries = Blog.query.all()
+            return render_template('blog.html', title='BLOGADOCIOUS!',entries=entries)
 
-        return render_template('posted.html', title='BLOGADOCIOUS!',blog_title=blog_title, blog_body=blog_body)
         
 @app.route('/signup', methods=['POST', 'GET'])
 def signup():
@@ -91,7 +97,7 @@ def signup():
         password = request.form['password']
         verify = request.form['verify']
        
-        #TODO - validate user data
+        
         if username == '':
             flash('Whoa there! An username is required to enter Blogz.', 'error')
             return render_template('signup.html', title='BLOGADOCIOUS!')
@@ -110,7 +116,7 @@ def signup():
             session['username'] = username
             return redirect('/newpost')
         else:
-            flash('Sorry! That username already exists.')
+            flash('Sorry! That username already exists.', )
         
     return render_template('signup.html')
 
@@ -132,7 +138,15 @@ def login():
     return render_template('login.html')
 
 
-@app.route('/index')
+@app.route('/', methods=['POST','GET'])
+def index():
+    users = User.query.all()
+    user_id = request.args.get ('id')
+    if user_id:
+        user_blogs = Blog.query.filter_by(owner_id=user-id)
+        return render_template('index.html', title='BLOGADOCIOUS!',users=users, user_blogs=user_blogs)
+    else:
+        return render_template('index.html', title='BLOGADOCIOUS!',users=users)
 
 
 

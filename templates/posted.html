@@ -2,8 +2,9 @@
 
 {% block content %}
 <form >
-    <div class='single'><h1>{{blog_title}}</h1></div>
-    <div class='single'>{{blog_body}}</div>
+    <div class='single'><h1>{{single.title}}</h1></div>
+    <div class='single'>{{single.body}}</div>
+    <p class='authorline'>written by <a href='/blog?user_id={{single.owner_id}}'>{{single.owner.username}}</a></p>
 
 
 
